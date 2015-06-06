@@ -1,7 +1,6 @@
 AddCSLuaFile()
 include("autorun/pure_med_config.lua")
 local btm = 70
-local ply = LocalPlayer()
 local hhit = false
 local tab = {
 	["$pp_colour_addr"] = 0,
@@ -19,6 +18,11 @@ net.Receive("screench", function(len)
 		hhit = true
 	end
 	return hhit
+end)
+
+net.Receive("gd", function(len)
+
+
 end)
 
 hook.Add("RenderScreenspaceEffects","h_hit",function()
