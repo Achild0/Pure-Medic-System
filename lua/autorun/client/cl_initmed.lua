@@ -1,19 +1,40 @@
-PUREMEDIC = {};
-PUREMEDIC.limbs = {
-  head = {},
-  chest = {},
-  stomach = {},
-  larm = {},
-  rarm = {},
-  lleg = {},
-  rleg = {}
-}
+PUREMEDIC_BODY = {};
+PUREMEDIC_BODY.__index = PUREMEDIC_BODY;
 
-PUREMEDIC.PSTATUS = 1;
+function PUREMEDIC_BODY:rebirth()
+  local body = {};
+  setmetatable(body,PUREMEDIC_BODY);
+  body.LIMBS = {
+    head = {},
+    chest = {},
+    stomach = {},
+    larm = {},
+    rarm = {},
+    lleg = {},
+    rleg = {}
+  };
+  for k,v in pairs(body.LIMBS) do
+    body[k].STATUS = 1;
+    body[k].LIMB_HEALTH = 100;
+    body[k].WOUNDS = 0;
+    body[k].WOUNDS_DETAIL = {};
+  end;
+  body.STATUS = 1;
+  return body;
+end;
 
-for k,v in pairs(PUREMEDIC.limbs) do
-  PUREMEDIC[k].STATUS = 1;
-  PUREMEDIC[k].LIMB_HEALTH = 100;
-  PUREMEDIC[k].WOUNDS = 0;
-  PUREMEDIC[k].WOUNDS_DETAIL = {};
+function PUREMEDIC_BODY:showLimbsStatus()
+  for k,v in pairs(self.LIMBS) do
+    print("Statut de "..k.." : ");
+    for y,z in pairs(v) do
+      if istable(z) then
+        print(y.." : ")
+        for g,h in pairs(z) do
+          print(z);
+        end;
+      else
+        print(y.." : "..z);
+      end;
+    end;
+  end;
 end;
