@@ -29,5 +29,4 @@ PUREMEDIC.hurt = function(vict,dmginfo)
   elseif hitgrp == HITGROUP_RIGHTLEG then
     PUREMEDIC.sendDamage(vict,"RLEG",dmg);
   end;
-
 end;

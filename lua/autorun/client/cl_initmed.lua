@@ -15,10 +15,10 @@ function PUREMEDIC_BODY.rebirth()
     rleg = {}
   };
   for k,v in pairs(body.LIMBS) do
-    body[k].STATUS = 1;
-    body[k].LIMB_HEALTH = 100;
-    body[k].WOUNDS = 0;
-    body[k].WOUNDS_DETAIL = {};
+    body.LIMBS[k].STATUS = 1;
+    body.LIMBS[k].LIMB_HEALTH = 100;
+    body.LIMBS[k].WOUNDS = 0;
+    body.LIMBS[k].WOUNDS_DETAIL = {};
   end;
   body.STATUS = 1;
   body.BLOOD = 1000;
@@ -46,12 +46,13 @@ end;
 
 function PUREMEDIC_BODY:bloodLoss(dmg,scale)
   if timer.Exists("PUREMEDIC_BloodLoss") then
-    self.BLEEDINGRATE = self.BLEEDINGRATE + (dmg/10*scale);
+    self.BLEEDINGRATE = self.BLEEDINGRATE + ((dmg/10)*scale);
   else
-    self.BLEEDINGRATE = (dmg/10*scale);
+    self.BLEEDINGRATE = ((dmg/10)*scale);
     timer.Create("PUREMEDIC_BloodLoss",3,0,function()
       self.BLOOD = self.BLOOD - self.BLEEDINGRATE;
       if self.BLOOD < 0 then
+        self.STATUS = 0;
         net.Start("PUREMEDIC_Death");
         net.SendToServer();
       end;
@@ -59,10 +60,14 @@ function PUREMEDIC_BODY:bloodLoss(dmg,scale)
 
 end;
 
-function PUREMEDIC_BODY:hitlimb(limbname,dmg)
+function PUREMEDIC_BODY:hitLimb(limbname,dmg)
+  local scale = 0;
   if limbname == "HEAD" then
-
+    scale = 2;
+    PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.head,dmg,scale);
+    self:bloodLoss(dmg,scale);
   elseif limbname == "CHEST" then
+    scale = 0.95;
 
   elseif limbname == "STOMACH" then
 
@@ -78,4 +83,8 @@ function PUREMEDIC_BODY:hitlimb(limbname,dmg)
 
   end;
 
+end;
+
+function PUREMEDIC_BODY:checkLimbsStatus()
+  for k,v in pairs(self.LIMBS)
 end;
