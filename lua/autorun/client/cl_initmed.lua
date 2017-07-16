@@ -60,29 +60,44 @@ function PUREMEDIC_BODY:bloodLoss(dmg,scale)
 
 end;
 
-function PUREMEDIC_BODY:hitLimb(limbname,dmg)
+function PUREMEDIC_BODY:hitLimb(limbname,dmg,dtype)
+  local dmg = dmg;
+  local dtype = dtype;
   local scale = 0;
-  if limbname == "HEAD" then
+  if dtype == DMG_FALL then
+    scale = 0.5;
+    PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.lleg,dmg,scale,dtype);
+    PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.rleg,dmg,scale,dtype);
+  elseif limbname == "HEAD" then
     scale = 2;
-    PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.head,dmg,scale);
+    //PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.head,dmg,scale);
     self:bloodLoss(dmg,scale);
   elseif limbname == "CHEST" then
     scale = 0.95;
-
+    PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.chest,dmg,scale,dtype);
   elseif limbname == "STOMACH" then
-
+    scale = 0.95;
+    PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.stomach,dmg,scale,dtype);
   elseif limbname == "LARM" then
-
+    scale = 0.95;
+    PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.larm,dmg,scale,dtype);
   elseif limbname == "RARM" then
-
-  elseif limbname == "LARM" then
-
+    scale = 0.95;
+    PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.rarm,dmg,scale,dtype);
   elseif limbname == "LLEG" then
-
+    scale = 0.95;
+    PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.lleg,dmg,scale,dtype);
   elseif limbname == "RLEG" then
-
+    scale = 0.95;
+    PUREMEDIC_CL.limbHitGestion(self,self.LIMBS.rleg,dmg,scale,dtype);
   end;
 
+end;
+
+function PUREMEDIC_BODY:addWound(limb,gravite,dtype)
+
+  limb.WOUNDS = limb.WOUNDS + 1;
+  limb.WOUNDS_DETAIL =
 end;
 
 function PUREMEDIC_BODY:checkLimbsStatus()

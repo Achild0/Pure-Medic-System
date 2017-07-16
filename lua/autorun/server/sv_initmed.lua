@@ -2,16 +2,18 @@ util.AddNetworkString("PUREMEDIC_send_damage");
 
 PUREMEDIC = {};
 
-PUREMEDIC.sendDamage = function(ply,part,dmg)
+PUREMEDIC.sendDamage = function(ply,part,dmg,dtype)
   net.Start("PUREMEDIC_send_damage");
     net.WriteString(part);
     net.WriteFloat(dmg);
+    net.WriteDouble(dtype);
   net.Send(ply);
 end;
 
 PUREMEDIC.hurt = function(vict,dmginfo)
   if !vict:IsPlayer() then return end;
   local dmg = dmginfo:GetDamage();
+  local dtype = dmginfo:GetDamageType();
   dmginfo:ScaleDamage(0);
   local lasthit = vict.LastHitGroup();
   if hitgrp == HITGROUP_HEAD then
