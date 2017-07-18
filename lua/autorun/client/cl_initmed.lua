@@ -44,14 +44,15 @@ function PUREMEDIC_BODY:showLimbsStatus()
   end;
 end;
 
-function PUREMEDIC_BODY:bloodLoss(dmg,scale)
+function PUREMEDIC_BODY:bloodLoss(bloss)
   if timer.Exists("PUREMEDIC_BloodLoss") then
-    self.BLEEDINGRATE = self.BLEEDINGRATE + ((dmg/10)*scale);
+    self.BLEEDINGRATE = self.BLEEDINGRATE + bloss;
   else
-    self.BLEEDINGRATE = ((dmg/10)*scale);
+    self.BLEEDINGRATE = bloss;
+    self.STATUS = 2;
     timer.Create("PUREMEDIC_BloodLoss",3,0,function()
       self.BLOOD = self.BLOOD - self.BLEEDINGRATE;
-      if self.BLOOD < 0 then
+      if self.BLOOD <= 0 then
         self.STATUS = 0;
         net.Start("PUREMEDIC_Death");
         net.SendToServer();
@@ -94,10 +95,14 @@ function PUREMEDIC_BODY:hitLimb(limbname,dmg,dtype)
 
 end;
 
-function PUREMEDIC_BODY:addWound(limb,gravite,dtype)
-
+function PUREMEDIC_BODY:addWound(limb,hypblood,gravite,dtype)
+  local origin = PUREMEDIC_CL.findWoundType(dtype);
+  local nwound = math.random(1,#PUREMEDIC_CL.wounds[gravite][origin])
   limb.WOUNDS = limb.WOUNDS + 1;
-  limb.WOUNDS_DETAIL =
+  table.Add(limb.WOUNDS_DETAIL,PUREMEDIC_CL.wounds[gravite][origin][nwound]);
+  if PUREMEDIC_CL.wounds[gravite][origin][nwound].woundbloodloss == true then
+    self:bloodLoss(hypblood);
+  end
 end;
 
 function PUREMEDIC_BODY:checkLimbsStatus()
